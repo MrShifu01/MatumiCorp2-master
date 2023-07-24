@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 const EditTransactionPage = () => {
     const { id } = useParams()
@@ -11,6 +12,8 @@ const EditTransactionPage = () => {
     const [industry, setIndustry] = useState('')
     const [description, setDescription] = useState('')
     const [imageSrc, setImageSrc] = useState('')
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchTransaction = async () => {
@@ -26,22 +29,44 @@ const EditTransactionPage = () => {
         fetchTransaction()
     }, [])
 
-    const uploadFileHandler = async (e) => {
-        const file = e.target.files[0]
-        const formData = new FormData()
-        formData.append('image', file)
-        try {
-          const config = {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-          const { data } = await axios.post('/api/upload', formData, config)
-          setImageSrc(data)
-        } catch (error) {
-          console.error(error)
-        }
+    const submitHandler = async (e) => {
+      e.preventDefault();
+      try {
+        await axios.put(`/api/transactions/${id}`, {
+          title,
+          mandate,
+          geography,
+          industry,
+          description,
+          imageSrc,
+        });
+        alert('Transaction updated');
+
+        navigate('/admin/transactions');
+      } catch (err) {
+        alert(err?.data?.message || err.error);
       }
+    };
+
+    const uploadFileHandler = async (e) => {
+      const file = e.target.files[0]
+      const formData = new FormData()
+      formData.set('image', file)
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+        const { data } = await axios.post('/api/upload', formData, config)
+        setImageSrc(data.image)
+        alert(data.message)
+
+      } catch (error) {
+        console.error(error)
+      }
+
+    }
 
 
 
@@ -51,7 +76,7 @@ const EditTransactionPage = () => {
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h1 className="text-center my-6">Edit Transaction</h1>
-            <form>
+            <form onSubmit={submitHandler}>
               <div className="form-group">
                 
                 <label>Title</label>

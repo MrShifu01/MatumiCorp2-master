@@ -13,9 +13,9 @@ body {
 }
 
 .hero-image {
-  background-image: url("../public/heroImg.jpeg");
+  background-image: url("../public/heroImg2.jpeg");
   height: 100%;
-  background-position: center -250px; /* Adjust the vertical positioning */
+  background-position: center; /* Adjust the vertical positioning */
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;

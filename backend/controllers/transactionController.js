@@ -57,22 +57,33 @@ const addTransaction = asyncHandler(async (req, res) => {
     res.status(201).json(transaction);
 });
 
-// // @desc    Update a transaction
-// // @route   PUT /transactions/:id
-// // @access  Private/Admin
-// exports.updateTransaction = asyncHandler(async (req, res) => {
-//     const { text, amount } = req.body;
-//     const transaction = await Transaction.findById(req.params.id);
-//     if (transaction) {
-//         transaction.text = text;
-//         transaction.amount = amount;
-//         const updatedTransaction = await transaction.save();
-//         res.json(updatedTransaction);
-//     } else {
-//         res.status(404);
-//         throw new Error('Transaction not found');
-//     }
-// });
+// @desc    Update a transaction
+// @route   PUT /transactions/:id
+// @access  Private/Admin
+const updateTransaction = asyncHandler(async (req, res) => {
+    const { 
+      title,
+      mandate,
+      geography,
+      industry,
+      description,
+      imageSrc,
+     } = req.body;
+    const transaction = await Transaction.findById(req.params.id);
+    if (transaction) {
+        transaction.title = title;
+        transaction.mandate = mandate;
+        transaction.geography = geography;
+        transaction.industry = industry;
+        transaction.description = description;
+        transaction.imageSrc = imageSrc;
+        const updatedTransaction = await transaction.save();
+        res.json(updatedTransaction);
+    } else {
+        res.status(404);
+        throw new Error('Transaction not found');
+    }
+});
 
 // @desc    Delete a transaction
 // @route   DELETE /transactions/:id
@@ -100,7 +111,7 @@ const getSingleTransaction = asyncHandler(async (req, res) => {
 module.exports = {
   getTransactions,
   addTransaction,
-  // updateTransaction,
+  updateTransaction,
   deleteTransaction,
   getSingleTransaction,
 };
