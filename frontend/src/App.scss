@@ -1,0 +1,288 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #eee;
+}
+
+.hero-container {
+    position: relative;
+    height: 100vh; /* You can adjust the height to your preference */
+  }
+  
+.hero-image {
+background-image: url("../public/heroImg.jpeg");
+height: 100%;
+background-position: center -250px; /* Adjust the vertical positioning */
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+}
+
+@media (max-width: 1650px) {
+    .hero-image {
+      background-position: center center; /* Center the image vertically and horizontally */
+      background-size: cover;
+      background-attachment: scroll; /* Change from fixed to scroll */
+    }
+  }
+
+.hero-overlay {
+background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+height: 100%;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+}
+  
+  
+.hero-text {
+position: absolute;
+z-index: 1000;
+top: 10%;
+right: 50%;
+color: white;
+margin-left: 3rem;
+margin-top: 7rem;
+padding-right: 10rem;
+transform: translateX(20%);
+}
+  
+
+// .hero-image {
+//     background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url("../public/heroImg2.jpeg");
+//     height: 50%;
+//     background-position: center;
+//     background-repeat: no-repeat;
+//     background-attachment: fixed;
+//     background-size: cover;
+//     position: relative;
+//     transform: scaleX(-1);
+// }
+
+// .hero-text {
+//     position: absolute;
+//     z-index: 1000;
+//     top: 20%;
+//     right: 50%;
+//     color: white;
+//     margin-left: 3rem;
+//     margin-top: 7rem;
+//     padding-right: 10rem;
+//     transform: translateX(20%);
+// }
+
+.navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+// .active-link {
+//     text-decoration: underline;
+//     color: var(--bs-dark);
+// }
+
+.active-link {
+    position: relative;
+    text-decoration: none;
+    color: var(--bs-dark);
+  }
+
+  .email-link{ 
+    color: var(--bs-info);
+  }
+  
+  .active-link::before {
+    content: '';
+    position: absolute;
+    bottom: -4px; /* Adjust the positioning of the underline */
+    border-radius: 5px;
+    left: 3px;
+    width: 90%;
+    height: 3px; /* Adjust the thickness of the underline */
+    background-color: var(--bs-secondary); /* Change the color of the underline */
+  }
+
+.navbar-content,
+.about {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.form-control {
+    margin: 10px 0;
+}
+
+.nav-button {
+    transform: translateY(-25%);
+}
+
+.modal-button {
+    width: 18rem;
+    height: 18rem;
+    border: none;
+    background-color: transparent;
+    filter: grayscale(100%);
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-close-button{
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-close-button:hover{
+    transform: scale(1.2);
+}
+
+.modal-nav-button {
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-nav-btn-wrapper {
+    margin-top: 12rem;
+}
+
+.nav-link-div {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+.modal-nav-button:hover {
+    transform: scale(1.2);
+}
+
+.square-button:hover {
+    filter: grayscale(0%);
+    .square-image {
+        transform: scale(1.08);
+    }
+}
+
+.square-image {
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+}
+
+.heading{
+    font-size: 4rem;
+}
+
+.modal-description {
+    font-size: 1rem;
+}
+
+.about-title {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.about-list-item {
+    margin-bottom: 1rem;
+}
+
+.carousel-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: scale-down;
+  }
+
+.address-link {
+    color: var(--bs-secondary);
+}
+
+.footer-link {
+    text-decoration: underline;
+    color: var(--bs-dark);
+}
+
+.card-img-top {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+}
+
+.card-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+}
+
+.invisible-h2 {
+    visibility: hidden;
+}
+
+.animate-slide-in{visibility: visible; -webkit-animation:fade-in-left 1s ease-in-out both;animation:fade-in-left 1s ease-in-out both}
+@-webkit-keyframes fade-in-left{0%{-webkit-transform:translateX(-50px);transform:translateX(-50px);opacity:0}100%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes fade-in-left{0%{-webkit-transform:translateX(-50px);transform:translateX(-50px);opacity:0}100%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}
+ 
+.footer-wrapper {
+    gap: 3rem;
+}
+
+/* Add some padding to the carousel indicators and control bars */
+.carousel-indicators,
+.carousel-control-prev,
+.carousel-control-next {
+  bottom: 20px; /* Adjust this value to change the vertical position */
+}
+
+/* Position the carousel indicators horizontally centered */
+.carousel-indicators {
+  transform: translateY(250%);
+}
+
+/* Position the previous and next control bars horizontally centered */
+.carousel-control-prev {
+  left: 100%;
+  transform: translateX(-100%);
+}
+
+.carousel-control-next {
+    left: 100%;
+  }
+
+@media(max-width: 767px) {
+    .footer-wrapper {
+        gap:1.5rem
+    }
+
+    .modal-nav-btn-wrapper {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 1000px) {
+    .hero-text {
+        text-align: center;
+        top: 50%; /* Change from top: 0 to top: 50% */
+        transform: translate(50%, -50%); /* Add this line to vertically and horizontally center the element */
+        margin: 0;
+        padding: 0;
+    }
+
+    .dark-bg {
+        background-color: var(--bs-dark); /* Replace with your desired dark background color */
+    }
+}
+
