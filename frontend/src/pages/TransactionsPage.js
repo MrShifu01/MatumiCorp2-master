@@ -225,7 +225,7 @@ const TransactionsPage = () => {
                           className="modal-button square-button p-7 shadow bg-white rounded-1 mb-6"
                         >
                           {/* <img className="square-image" src={modal.imageSrc} alt="logo" /> */}
-                          <img className="square-image" src={modal.imageSrc.includes('http') ? modal.imageSrc : `http://localhost:8000${modal.imageSrc}`} alt="logo" />
+                          <img className="square-image" src={modal.imageSrc.includes('http') ? modal.imageSrc : `https://matumi-server.onrender.com/${modal.imageSrc}`} alt="logo" />
                         </button>
                         {/* Add a ref to the last transaction element */}
                         {index === modalsData.length - 1 && <div ref={lastTransactionRef} />}
