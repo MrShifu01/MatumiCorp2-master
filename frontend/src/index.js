@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import AdminPage from './pages/AdminPage';
 import EditTransactionPage from './pages/EditTransactionPage';
+import ScrollPage from './pages/ScrollPage';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: '/admin/transactions/edit/:id',
     element: <EditTransactionPage />,
+  },
+  {
+    path: '/scroll',
+    element: <ScrollPage />,
   },
 ]);
 

@@ -8,6 +8,7 @@ import { openModal, closeCurrentModal } from '../redux/transactionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import { Form, Button } from "react-bootstrap"
+import { useInfiniteQuery } from 'react-query'; ////////////////
 
 const TransactionsPage = () => {
   const dispatch = useDispatch();
@@ -16,14 +17,31 @@ const TransactionsPage = () => {
 
   const { keyword } = useParams();
   const [modalsData, setModalsData] = useState(null);
-
   const lastTransactionRef = useRef();
-
   const navigate = useNavigate()
+
   const [searchKeyword, setSearchKeyword] = useState('')
   const [filterOptionMandate, setFilterOptionMandate] = useState('')
   const [filterOptionGeography, setFilterOptionGeography] = useState('')
   const [filterOptionIndustry, setFilterOptionIndustry] = useState('')
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ['transactions', keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry],
+    async ({ pageParam = 1 }) => {
+      const response = await axios.get(`/api/transactions`, {
+        params: { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page: pageParam },
+      });
+      setModalsData(response.data);
+      return response.data;
+    },
+    {
+      getNextPageParam: (_, pages) => {
+        return pages.length + 1;
+      },
+    }
+  );
+  
+
 
   const mandates = modalsData?.reduce((uniqueMandates, modal) => {
     if (!uniqueMandates.includes(modal.mandate)) {
@@ -217,24 +235,35 @@ const TransactionsPage = () => {
                     </div>
                     <button onClick={handleReset} className='btn btn-outline-dark mt-5'>Reset Filters</button>
 
-                  <div className="row mt-8">
-                    {modalsData.map((modal, index) => (
-                      <div className="col-md-3 text-center modal-buttons" key={index}>
-                        <button
-                          onClick={() => handleOpenModal(modal._id)}
-                          className="modal-button square-button p-7 shadow bg-white rounded-1 mb-6"
-                        >
-                          {/* <img className="square-image" src={modal.imageSrc} alt="logo" /> */}
-                          <img className="square-image" src={modal.imageSrc.includes('http') ? modal.imageSrc : `https://matumi-server.onrender.com${modal.imageSrc}`} alt="logo" />
-                        </button>
-                        {/* Add a ref to the last transaction element */}
-                        {index === modalsData.length - 1 && <div ref={lastTransactionRef} />}
-                      </div>
+                    <div className="row mt-8">
+                    {data.pages.map((page, pageIndex) => (
+                      <React.Fragment key={pageIndex}>
+                        {page.map((modal, index) => (
+                          <div className="col-md-3 text-center modal-buttons" key={index}>
+                            <button
+                              onClick={() => handleOpenModal(modal._id)}
+                              className="modal-button square-button p-7 shadow bg-white rounded-1 mb-6"
+                            >
+                              <img
+                                className="square-image"
+                                src={modal.imageSrc.includes('http') ? modal.imageSrc : `https://matumi-server.onrender.com${modal.imageSrc}`}
+                                alt="logo"
+                              />
+                            </button>
+                            {pageIndex === data.pages.length - 1 && index === page.length - 1 && (
+                              <div ref={lastTransactionRef} />
+                            )}
+                          </div>
+                        ))}
+                      </React.Fragment>
                     ))}
                   </div>
+                  <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+                    {isFetchingNextPage ? 'Loading more...' : hasNextPage ? 'Load More' : 'No More Data'}
+                  </button>
+                </div>
                 </div>
               </div>
-            </div>
           </section>
         </>
       )}

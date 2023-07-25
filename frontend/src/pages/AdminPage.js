@@ -48,12 +48,29 @@ const AdminPage = () => {
         setTransactions((prevTransactions) => prevTransactions.filter((transaction) => transaction._id !== id))
     }
 
+    const navHome = () => {
+        navigate('/')
+    }
+
+    const navTransactions = () => {
+        navigate('/transactions')
+    }
 
   return (
     <div className="container-xxl">
         <h1 className="my-6 text-center">Transactions</h1>
-        <div className="d-flex justify-content-end me-8">
-            <Button className="my-6" onClick={handleAdd}>Add Transaction</Button>
+        <div className="d-flex justify-content-between">
+            <div className="d-flex flex-column">
+                <div className="d-flex">
+                    <Button className="mb-3" variant="secondary" onClick={navHome}>Home Page</Button>
+                </div>
+                <div className="d-flex">
+                    <Button className="" variant="secondary" onClick={navTransactions}>Transaction Page</Button>
+                </div>
+            </div>
+            <div className="d-flex justify-content-end me-8">
+                <Button className="my-6" onClick={handleAdd}>Add Transaction</Button>
+            </div>
         </div>
         {loading ? (
             <Loader />
@@ -79,8 +96,8 @@ const AdminPage = () => {
                             <td>{transaction.geography}</td>
                             <td>{transaction.industry}</td>
                             <td>{transaction.description}</td>
-                            <td>
-                                <Button variant='light' className='btn-sm' onClick={() => handleEdit(transaction._id)}>
+                            <td className="d-flex gap-2">
+                                <Button variant='primary' className='btn-sm' onClick={() => handleEdit(transaction._id)}>
                                     <FaEdit />
                                 </Button>
                                 <Button variant='danger' className='btn-sm' onClick={() => handleDelete(transaction._id)}>

@@ -10,9 +10,9 @@ const Transaction = require("../models/TransactionModel");
 //   res.json(transactions);
 // });
 
-
 const getTransactions = asyncHandler(async (req, res) => {
-  const {keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry} = req.query
+  const { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page = 1, pageSize = 10 } = req.query;
+
   let query;
   if (keyword) {
     // if keyword, return transactions that match the keyword
@@ -24,7 +24,7 @@ const getTransactions = asyncHandler(async (req, res) => {
         { industry: { $regex: keyword, $options: "i" } },
         { description: { $regex: keyword, $options: "i" } },
       ],
-    }
+    };
   } else if (filterOptionMandate) {
     query = { mandate: { $regex: filterOptionMandate, $options: "i" } };
   } else if (filterOptionGeography) {
@@ -35,11 +35,67 @@ const getTransactions = asyncHandler(async (req, res) => {
     // if no keyword or filterOption, return all transactions
     query = {};
   }
+
+  // Calculate the skip value to handle pagination
+  const skip = (page - 1) * pageSize;
+
+  // Fetch transactions for the current page and page size
+  const transactions = await Transaction.find({ ...query })
+    .skip(skip)
+    .limit(pageSize)
+    .exec();
+
+  // Fetch the total count of transactions for pagination
+  const totalCount = await Transaction.countDocuments({ ...query }).exec();
+
+  // Calculate the total number of pages based on page size and total count
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  // Prepare the response with pagination information
+  const response = {
+    data: transactions,
+    pagination: {
+      page: parseInt(page),
+      pageSize: parseInt(pageSize),
+      totalCount,
+      totalPages,
+    },
+  };
+
+  res.json(response);
+});
+
+
+
+// const getTransactions = asyncHandler(async (req, res) => {
+//   const {keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry} = req.query
+//   let query;
+//   if (keyword) {
+//     // if keyword, return transactions that match the keyword
+//     query = {
+//       $or: [
+//         { title: { $regex: keyword, $options: "i" } },
+//         { mandate: { $regex: keyword, $options: "i" } },
+//         { geography: { $regex: keyword, $options: "i" } },
+//         { industry: { $regex: keyword, $options: "i" } },
+//         { description: { $regex: keyword, $options: "i" } },
+//       ],
+//     }
+//   } else if (filterOptionMandate) {
+//     query = { mandate: { $regex: filterOptionMandate, $options: "i" } };
+//   } else if (filterOptionGeography) {
+//     query = { geography: { $regex: filterOptionGeography, $options: "i" } };
+//   } else if (filterOptionIndustry) {
+//     query = { industry: { $regex: filterOptionIndustry, $options: "i" } };
+//   } else {
+//     // if no keyword or filterOption, return all transactions
+//     query = {};
+//   }
   
 
-  const transactions = await Transaction.find({ ...query })
-  res.json(transactions);
-});
+//   const transactions = await Transaction.find({ ...query })
+//   res.json(transactions);
+// });
 
 
 // @desc    Add a transaction
