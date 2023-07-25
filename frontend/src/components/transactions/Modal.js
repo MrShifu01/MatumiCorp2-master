@@ -64,7 +64,7 @@ const Modal = ({ closeModal, activeModalId, modalsData }) => {
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
                     <div className='d-flex flex-column gap-5'>
-                      {<img style={{ width: "100px", height: "100px", objectFit: "contain" }} src={activeModal.imageSrc.includes('http') ? activeModal.imageSrc : `https://matumi-server.onrender.com/${activeModal.imageSrc}`} alt="logo"/>}
+                      {<img style={{ width: "100px", height: "100px", objectFit: "contain" }} src={activeModal.imageSrc.includes('http') ? activeModal.imageSrc : `https://matumi-server.onrender.com${activeModal.imageSrc}`} alt="logo"/>}
                       <p className='modal-description'>{activeModal.description}</p>
                     </div>
                   </Dialog.Title>
