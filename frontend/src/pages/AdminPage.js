@@ -44,7 +44,7 @@ const AdminPage = () => {
     
     const handleDelete = async (id) => {
         window.confirm('Are you sure you want to delete this transaction?')
-        await axios.delete(`/api/transactions/${id}`)
+        await axios.delete(`/api/transactions/admin/${id}`)
         setTransactions((prevTransactions) => prevTransactions.filter((transaction) => transaction._id !== id))
     }
 

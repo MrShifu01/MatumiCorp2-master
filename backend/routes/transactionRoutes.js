@@ -6,9 +6,12 @@ router.route('/')
 .get(getTransactions)
 .post(addTransaction)
 
-router.route('/:id')
+router.route('/admin/:id')
 .delete(deleteTransaction)
 .get(getSingleTransaction)
 .put(updateTransaction)
+
+router.route('/test')
+.get(getTransactions)
 
 module.exports = router

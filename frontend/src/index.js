@@ -8,7 +8,10 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import AdminPage from './pages/AdminPage';
 import EditTransactionPage from './pages/EditTransactionPage';
-import ScrollPage from './pages/ScrollPage';
+import { QueryClient, QueryClientProvider } from "react-query";
+import TestPage from './pages/TestPage';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -19,6 +22,10 @@ const router = createBrowserRouter([
   {
     path:'/transactions',
     element: <TransactionsPage />,
+  },
+  {
+    path:'/test',
+    element: <TestPage />,
   },
   {
     path: '/transactions/search/:keyword',
@@ -32,15 +39,13 @@ const router = createBrowserRouter([
     path: '/admin/transactions/edit/:id',
     element: <EditTransactionPage />,
   },
-  {
-    path: '/scroll',
-    element: <ScrollPage />,
-  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </Provider>
 );

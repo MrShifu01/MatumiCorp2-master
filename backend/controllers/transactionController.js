@@ -4,15 +4,14 @@ const Transaction = require("../models/TransactionModel");
 // @desc    Get all transactions
 // @route   GET /transactions
 // @access  Public
-// const getTransactions = asyncHandler(async (req, res) => {
-//   console.log(req.query.keyword)
-//   const transactions = await Transaction.find({});
-//   res.json(transactions);
-// });
-
 const getTransactions = asyncHandler(async (req, res) => {
-  const { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page = 1, pageSize = 10 } = req.query;
+  const { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page, limit } = req.query;
+  console.log(page);
 
+  const startIndex = (parseInt(page) - 1) * limit;
+  const endIndex = parseInt(page) * limit;
+
+  // Handle regular transactions query
   let query;
   if (keyword) {
     // if keyword, return transactions that match the keyword
@@ -36,66 +35,20 @@ const getTransactions = asyncHandler(async (req, res) => {
     query = {};
   }
 
-  // Calculate the skip value to handle pagination
-  const skip = (page - 1) * pageSize;
+  // Fetch total documents to calculate total pages
+  const totalDocuments = await Transaction.countDocuments(query);
+  const totalPages = Math.ceil(totalDocuments / limit);
 
-  // Fetch transactions for the current page and page size
-  const transactions = await Transaction.find({ ...query })
-    .skip(skip)
-    .limit(pageSize)
-    .exec();
+  // Fetch paginated transactions based on the query
+  const testTransactions = await Transaction.find(query).skip(startIndex).limit(limit);
 
-  // Fetch the total count of transactions for pagination
-  const totalCount = await Transaction.countDocuments({ ...query }).exec();
-
-  // Calculate the total number of pages based on page size and total count
-  const totalPages = Math.ceil(totalCount / pageSize);
-
-  // Prepare the response with pagination information
-  const response = {
-    data: transactions,
-    pagination: {
-      page: parseInt(page),
-      pageSize: parseInt(pageSize),
-      totalCount,
-      totalPages,
-    },
-  };
-
-  res.json(response);
+  res.json({
+    transactions: testTransactions,
+    currentPage: parseInt(page),
+    totalPages,
+  });
 });
 
-
-
-// const getTransactions = asyncHandler(async (req, res) => {
-//   const {keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry} = req.query
-//   let query;
-//   if (keyword) {
-//     // if keyword, return transactions that match the keyword
-//     query = {
-//       $or: [
-//         { title: { $regex: keyword, $options: "i" } },
-//         { mandate: { $regex: keyword, $options: "i" } },
-//         { geography: { $regex: keyword, $options: "i" } },
-//         { industry: { $regex: keyword, $options: "i" } },
-//         { description: { $regex: keyword, $options: "i" } },
-//       ],
-//     }
-//   } else if (filterOptionMandate) {
-//     query = { mandate: { $regex: filterOptionMandate, $options: "i" } };
-//   } else if (filterOptionGeography) {
-//     query = { geography: { $regex: filterOptionGeography, $options: "i" } };
-//   } else if (filterOptionIndustry) {
-//     query = { industry: { $regex: filterOptionIndustry, $options: "i" } };
-//   } else {
-//     // if no keyword or filterOption, return all transactions
-//     query = {};
-//   }
-  
-
-//   const transactions = await Transaction.find({ ...query })
-//   res.json(transactions);
-// });
 
 
 // @desc    Add a transaction

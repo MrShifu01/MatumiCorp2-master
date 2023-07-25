@@ -8,7 +8,7 @@ import { openModal, closeCurrentModal } from '../redux/transactionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import { Form, Button } from "react-bootstrap"
-import { useInfiniteQuery } from 'react-query'; ////////////////
+import { useInfiniteQuery } from 'react-query';
 
 const TransactionsPage = () => {
   const dispatch = useDispatch();
@@ -16,92 +16,56 @@ const TransactionsPage = () => {
   const { activeModalId } = useSelector((state) => state.transactions);
 
   const { keyword } = useParams();
-  const [modalsData, setModalsData] = useState(null);
   const lastTransactionRef = useRef();
   const navigate = useNavigate()
-
+  const [allData, setAllData] = useState([])
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [filterOptionMandate, setFilterOptionMandate] = useState('')
-  const [filterOptionGeography, setFilterOptionGeography] = useState('')
-  const [filterOptionIndustry, setFilterOptionIndustry] = useState('')
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ['transactions', keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry],
-    async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/api/transactions`, {
-        params: { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page: pageParam },
+  useEffect(() => {
+    const fetchAllData = async () => {
+      const response = await axios.get(`/api/transactions/`, {
+        params: {
+          limit: 1000,
+        },
       });
-      setModalsData(response.data);
-      return response.data;
-    },
+      console.log(response.data)
+      setAllData(response.data)
+    }
+    fetchAllData()
+  }, [])
+
+  const LIMIT = 4;
+
+  const fetchTransactions = async (page) => {
+    const response = await axios.get(`/api/transactions/test/`, {
+      params: {
+        keyword,
+        page,
+        limit: LIMIT,
+      },
+    });
+    return response.data;
+  };
+  
+  const {
+    data,
+    isSuccess,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    "transactions",
+    ({ pageParam = 1 }) => fetchTransactions(pageParam),
     {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1;
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.transactions.length === LIMIT
+            ? allPages.length + 1
+            : undefined;
+        return nextPage;
       },
     }
   );
-  
-
-
-  const mandates = modalsData?.reduce((uniqueMandates, modal) => {
-    if (!uniqueMandates.includes(modal.mandate)) {
-      uniqueMandates.push(modal.mandate);
-    }
-    return uniqueMandates;
-  }, []);
-
-  const geographies = modalsData?.reduce((uniqueGeographies, modal) => {
-    if (!uniqueGeographies.includes(modal.geography)) {
-      uniqueGeographies.push(modal.geography);
-    }
-    return uniqueGeographies;
-  }, []);
-
-  const industries = modalsData?.reduce((uniqueIndustries, modal) => {
-    if (!uniqueIndustries.includes(modal.industry)) {
-      uniqueIndustries.push(modal.industry);
-    }
-    return uniqueIndustries;
-  }, []);
-
-  useEffect(() => {
-    // This effect will be triggered after every render when filterOption changes
-    if (filterOptionMandate && filterOptionMandate !== 'All') {
-      navigate(`/transactions/search/${filterOptionMandate}`);
-    } else if (filterOptionMandate === 'All') {
-      navigate('/transactions');
-    }
-  }, [filterOptionMandate]);
-
-  useEffect(() => {
-    // This effect will be triggered after every render when filterOption changes
-    if (filterOptionGeography && filterOptionGeography !== 'All') {
-      navigate(`/transactions/search/${filterOptionGeography}`);
-    } else if (filterOptionGeography === 'All') {
-      navigate('/transactions');
-    }
-  }, [filterOptionGeography]);
-
-  useEffect(() => {
-    // This effect will be triggered after every render when filterOption changes
-    if (filterOptionIndustry && filterOptionIndustry !== 'All') {
-      navigate(`/transactions/search/${filterOptionIndustry}`);
-    } else if (filterOptionIndustry === 'All') {
-      navigate('/transactions');
-    }
-  }, [filterOptionIndustry]);
-
-  const handleFilterMandateChange = (ev) => {
-    setFilterOptionMandate(ev.target.value);
-  };
-
-  const handleFilterGeographyChange = (ev) => {
-    setFilterOptionGeography(ev.target.value);
-  };
-
-  const handleFilterIndustryChange = (ev) => {
-    setFilterOptionIndustry(ev.target.value);
-  };
 
   const handleSearch = () => {
       if(searchKeyword.trim()) {
@@ -120,33 +84,11 @@ const TransactionsPage = () => {
     dispatch(closeCurrentModal());
   };
 
-  useEffect(() => {
-    // Fetch initial data
-    fetchTransactions();
-  }, [keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry]); // Update data when the keyword changes in the URL
-
-  const fetchTransactions = async () => {
-    try {
-      const response = await axios.get(`/api/transactions`, {
-        params: { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry },
-      });
-      const newData = response.data;
-      setModalsData(newData);
-    } catch (error) {
-      console.log(error.message || 'An error occurred while fetching data');
-    } 
-  };
-
   const handleReset = () => {
-    setFilterOptionMandate('')
-    setFilterOptionGeography('')
-    setFilterOptionIndustry('')
     navigate('/transactions')
   }
 
-  console.log(modalsData)
-
-  if (!modalsData) {
+  if (!data) {
     // Handle initial data loading
     return <Loader />;
   }
@@ -180,65 +122,14 @@ const TransactionsPage = () => {
                   <h2 className="ms-3 mt-7">Filter</h2>
 
                     <div className='d-flex justify-content-between'>
-                      
-                      <div className='w-75'>
-                        <h5 className="ms-3 mt-5">By Mandate</h5>
-                        <Form>
-                          <Form.Select
-                            value={filterOptionMandate}
-                            onChange={handleFilterMandateChange}
-                            className='mr-sm-2 ml-sm-5 ps w-75 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted'
-                          >
-                              <option value=""></option>
-                            {mandates.map((mandate, index) => (
-                              <option key={index} value={mandate}>
-                                {mandate}
-                              </option>))}
-                          </Form.Select>
-                        </Form>
-                      </div>
-
-                      <div className='w-75'>
-                        <h5 className="ms-3 mt-5">By Geography</h5>
-                        <Form>
-                          <Form.Select
-                            value={filterOptionGeography}
-                            onChange={handleFilterGeographyChange}
-                            className='mr-sm-2 ml-sm-5 ps w-75 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted'
-                          >
-                              <option value=""></option>
-                            {geographies.map((geography, index) => (
-                              <option key={index} value={geography}>
-                                {geography}
-                              </option>))}
-                          </Form.Select>
-                        </Form>
-                      </div>
-
-                      <div className='w-75'>
-                        <h5 className="ms-3 mt-5">By Industry</h5>
-                        <Form>
-                          <Form.Select
-                            value={filterOptionIndustry}
-                            onChange={handleFilterIndustryChange}
-                            className='mr-sm-2 ml-sm-5 ps w-75 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted'
-                          >
-                              <option value=""></option>
-                            {industries.map((industry, index) => (
-                              <option key={index} value={industry}>
-                                {industry}
-                              </option>))}
-                          </Form.Select>
-                        </Form>
-                      </div>
-
+                      filters
                     </div>
                     <button onClick={handleReset} className='btn btn-outline-dark mt-5'>Reset Filters</button>
 
                     <div className="row mt-8">
-                    {data.pages.map((page, pageIndex) => (
+                    {isSuccess && data.pages.map((page, pageIndex) => (
                       <React.Fragment key={pageIndex}>
-                        {page.map((modal, index) => (
+                        {page.transactions.map((modal, index) => (
                           <div className="col-md-3 text-center modal-buttons" key={index}>
                             <button
                               onClick={() => handleOpenModal(modal._id)}
@@ -258,9 +149,11 @@ const TransactionsPage = () => {
                       </React.Fragment>
                     ))}
                   </div>
-                  <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
-                    {isFetchingNextPage ? 'Loading more...' : hasNextPage ? 'Load More' : 'No More Data'}
-                  </button>
+                  <div className='d-flex justify-content-center mb-8'>
+                    <button className='btn btn-light rounded-5 border' onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+                      {isFetchingNextPage ? 'Loading more...' : hasNextPage ? '+' : 'No More Data'}
+                    </button>
+                  </div>
                 </div>
                 </div>
               </div>
@@ -271,7 +164,7 @@ const TransactionsPage = () => {
         <Modal
           closeModal={handleCloseModal}
           activeModalId={activeModalId}
-          modalsData={modalsData} // Pass the modalsData to the Modal component
+          modalsData={allData.transactions} // Pass the modalsData to the Modal component
         />
       )}
 
