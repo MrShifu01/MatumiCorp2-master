@@ -245,6 +245,7 @@ transform: translateX(20%);
 
 .load-button {
     opacity: 0.6;
+    transition: all 0.3s ease-in-out;
 }
 
 .load-button:hover {
