@@ -15,26 +15,33 @@ const TransactionsPage = () => {
   const { isModalOpen } = useSelector((state) => state.transactions);
   const { activeModalId } = useSelector((state) => state.transactions);
   const [modalsData, setModalsData] = useState([]);
+  const [selectedMandateFilter, setSelectedMandateFilter] = useState("");
+  const [allMandates, setAllMandates] = useState(true);
+  const [selectedIndustryFilter, setSelectedIndustryFilter] = useState("");
+  const [allIndustries, setAllIndustries] = useState(true);
 
   const { keyword } = useParams();
-  const lastTransactionRef = useRef();
+  // const lastTransactionRef = useRef();
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
 
-    // Move the useEffect inside the component and add keyword as a dependency
-    useEffect(() => {
-      const fetchModalsData = async () => {
-        const response = await axios.get(`/api/transactions/paginate/`, {
-          params: {
-            keyword,
-            page: 1, // Assuming you want to fetch the first page of modal data
-            limit: 1000,
-          },
-        });
-        setModalsData(response.data.transactions);
-      };
-      fetchModalsData();
-    }, [keyword]);
+  // Move the useEffect inside the component and add keyword as a dependency
+  useEffect(() => {
+    const fetchModalsData = async () => {
+      console.log(selectedMandateFilter);
+      const response = await axios.get(`/api/transactions/`, {
+        params: {
+          keyword,
+          page: 1, // Assuming you want to fetch the first page of modal data
+          limit: 1000,
+          mandate: selectedMandateFilter,
+          industry: selectedIndustryFilter,
+        },
+      });
+      setModalsData(response.data.transactions);
+    };
+    fetchModalsData();
+  }, [keyword, selectedMandateFilter, selectedIndustryFilter]);
 
   const LIMIT = 12;
   const fetchTransactions = async (page) => {
@@ -43,6 +50,8 @@ const TransactionsPage = () => {
         keyword,
         page,
         limit: LIMIT,
+        mandate: selectedMandateFilter,
+        insudtry: selectedIndustryFilter,
       },
     });
     return response.data;
@@ -80,7 +89,67 @@ const TransactionsPage = () => {
     dispatch(closeCurrentModal());
   };
 
+  const handleMandateFilter = (mandate) => {
+    setAllMandates(false);
+    setSelectedMandateFilter((prevFilter) =>
+      prevFilter === mandate ? "" : mandate
+    );
+    if (selectedMandateFilter) {
+      navigate(`/transactions?mandate=${mandate}`);
+    } else {
+      navigate(`/transactions`);
+    }
+  };
 
+  const handleIndustryFilter = (industry) => {
+    setAllIndustries(false);
+    setSelectedIndustryFilter((prevFilter) =>
+      prevFilter === industry ? "" : industry
+    );
+    if (selectedIndustryFilter) {
+      navigate(`/transactions?industry=${industry}`);
+    } else {
+      navigate(`/transactions`);
+    }
+  };
+
+  const handleAllMandates = () => {
+    setAllMandates((prev) => !prev);
+    setSelectedMandateFilter("");
+    navigate(`/transactions`);
+  };
+
+  const handleAllIndustries = () => {
+    setAllIndustries((prev) => !prev);
+    setSelectedIndustryFilter("");
+    navigate(`/transactions`);
+  };
+
+  // Filter transactions based on the selectedFilter
+  const filteredTransactions = data
+    ? data.pages.flatMap((page) => page.transactions)
+    : [];
+
+  // Filter transactions based on the selectedFilter and selectedMandateFilter
+  const filteredData = filteredTransactions.filter((transaction) => {
+    // Check if both the selectedMandateFilter and selectedIndustryFilter are present
+    if (selectedMandateFilter && selectedIndustryFilter) {
+      return (
+        transaction.mandate === selectedMandateFilter &&
+        transaction.industry === selectedIndustryFilter
+      );
+    }
+    // Check if only the selectedMandateFilter is present
+    else if (selectedMandateFilter) {
+      return transaction.mandate === selectedMandateFilter;
+    }
+    // Check if only the selectedIndustryFilter is present
+    else if (selectedIndustryFilter) {
+      return transaction.industry === selectedIndustryFilter;
+    }
+    // If neither filter is present, return all transactions
+    return true;
+  });
 
   if (!data) {
     // Handle initial data loading
@@ -97,7 +166,6 @@ const TransactionsPage = () => {
             <div className="container">
               <div className="row mt-8">
                 <div className="col">
-                  {/* <button className='btn btn-outline-primary'><Link className='text-decoration-none text-dark' to='/'>Go Back</Link></button> */}
                   <h2 className="ms-3">Search</h2>
                   <Form onSubmit={handleSearch} className="d-flex">
                     <Form.Control
@@ -106,76 +174,131 @@ const TransactionsPage = () => {
                       onChange={(ev) => setSearchKeyword(ev.target.value)}
                       placeholder="Search Transactions..."
                       className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
-                    ></Form.Control>
+                    />
                     <Button type="submit" variant="light" className="p-2 mx-2">
                       <img src="/search.png" alt="search" />
                     </Button>
                   </Form>
-                  {/* <Form className="d-flex">
-                    <Form.Select
-                      value={filterOptionMandate}
-                      onChange={handleFilterMandate}
-                      className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
-                    >
-                      <option value="">All Mandates</option>
-                      <option value="Buy-Side">Buy-Side</option>
-                      <option value="Sell-Side">Sell-Side</option>
-                      <option value="Capital Raising">Capital Raising</option>
-                    </Form.Select>
-                    <Button type="submit" variant="light" className="p-2 mx-2">
-                      <img src="/search.png" alt="search" />
-                    </Button>
-                  </Form>
-                  <Form className="d-flex">
-                    <Form.Select
-                      value={filterOptionIndustry}
-                      onChange={handleFilterIndustry}
-                      className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
-                    >
-                      <option value="">All Industries</option>
-                      <option value="Industrial">Industrial</option>
-                      <option value="Financial Services">
-                        Financial Services
-                      </option>
-                      <option value="Logistics">Logistics</option>
-                      <option value="Technology">Technology</option>
-                      <option value="Other">Other</option>
-                    </Form.Select>
-                    <Button type="submit" variant="light" className="p-2 mx-2">
-                      <img src="/search.png" alt="search" />
-                    </Button>
-                  </Form> */}
+                  {/* FILTER BY MANDATE */}
+                  <button
+                    className={`btn ${allMandates ? "btn-primary" : ""}`}
+                    onClick={handleAllMandates}
+                    disabled={allMandates}
+                  >
+                    All Mandates
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedMandateFilter === "Sell-Side" ? "btn-primary" : ""
+                    }`}
+                    onClick={(ev) => handleMandateFilter("Sell-Side")}
+                  >
+                    Sell-Side
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedMandateFilter === "Buy-Side" ? "btn-primary" : ""
+                    }`}
+                    onClick={(ev) => handleMandateFilter("Buy-Side")}
+                  >
+                    Buy-Side
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedMandateFilter === "Capital Raising"
+                        ? "btn-primary"
+                        : ""
+                    }`}
+                    onClick={(ev) => handleMandateFilter("Capital Raising")}
+                  >
+                    Capital Raising
+                  </button>
+
+                  {/* FILTER BY INDUSTRY*/}
+                  <button
+                    className={`btn ${allIndustries ? "btn-primary" : ""}`}
+                    onClick={handleAllIndustries}
+                    disabled={allIndustries}
+                  >
+                    All Industries
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedIndustryFilter === "Industrial"
+                        ? "btn-primary"
+                        : ""
+                    }`}
+                    onClick={(ev) => handleIndustryFilter("Industrial")}
+                  >
+                    Industrial
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedIndustryFilter === "Financial Services"
+                        ? "btn-primary"
+                        : ""
+                    }`}
+                    onClick={(ev) => handleIndustryFilter("Financial Services")}
+                  >
+                    Financial Services
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedIndustryFilter === "Logistics" ? "btn-primary" : ""
+                    }`}
+                    onClick={(ev) => handleIndustryFilter("Logistics")}
+                  >
+                    Logistics
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedIndustryFilter === "Technology"
+                        ? "btn-primary"
+                        : ""
+                    }`}
+                    onClick={(ev) => handleIndustryFilter("Technology")}
+                  >
+                    Technology
+                  </button>
+
+                  <button
+                    className={`btn ${
+                      selectedIndustryFilter === "Other" ? "btn-primary" : ""
+                    }`}
+                    onClick={(ev) => handleIndustryFilter("Other")}
+                  >
+                    Other
+                  </button>
 
                   <div className="row mt-8">
                     {isSuccess &&
-                      data.pages.map((page, pageIndex) => (
-                        <React.Fragment key={pageIndex}>
-                          {page.transactions.map((modal, index) => (
-                            <div
-                              className="col-md-3 text-center modal-buttons"
-                              key={index}
-                            >
-                              <button
-                                onClick={() => handleOpenModal(modal._id)}
-                                className="modal-button square-button p-7 shadow bg-white rounded-1 mb-6"
-                              >
-                                <img
-                                  className="square-image"
-                                  src={
-                                    modal.imageSrc.includes("http")
-                                      ? modal.imageSrc
-                                      : `https://matumi-server.onrender.com${modal.imageSrc}`
-                                  }
-                                  alt="logo"
-                                />
-                              </button>
-                              {pageIndex === data.pages.length - 1 &&
-                                index === page.length - 1 && (
-                                  <div ref={lastTransactionRef} />
-                                )}
-                            </div>
-                          ))}
-                        </React.Fragment>
+                      filteredData.map((modal, index) => (
+                        <div
+                          className="col-md-3 text-center modal-buttons"
+                          key={index}
+                        >
+                          <button
+                            onClick={() => handleOpenModal(modal._id)}
+                            className="modal-button square-button p-7 shadow bg-white rounded-1 mb-6"
+                          >
+                            <img
+                              className="square-image"
+                              src={
+                                modal.imageSrc.includes("http")
+                                  ? modal.imageSrc
+                                  : `https://matumi-server.onrender.com${modal.imageSrc}`
+                              }
+                              alt="logo"
+                            />
+                          </button>
+                        </div>
                       ))}
                   </div>
                   <div className="d-flex justify-content-center mb-8">
@@ -184,11 +307,13 @@ const TransactionsPage = () => {
                       onClick={() => fetchNextPage()}
                       disabled={!hasNextPage || isFetchingNextPage}
                     >
-                      {isFetchingNextPage
-                        ? "Loading more..."
-                        : hasNextPage
-                        ? <img src="/plus.png" width={'40px'} alt="load more" />
-                        : "No More Data"}
+                      {isFetchingNextPage ? (
+                        "Loading more..."
+                      ) : hasNextPage ? (
+                        <img src="/plus.png" width={"40px"} alt="load more" />
+                      ) : (
+                        "No More Data"
+                      )}
                     </button>
                   </div>
                 </div>
