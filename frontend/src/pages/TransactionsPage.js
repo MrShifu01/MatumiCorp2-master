@@ -51,7 +51,7 @@ const TransactionsPage = () => {
         page,
         limit: LIMIT,
         mandate: selectedMandateFilter,
-        insudtry: selectedIndustryFilter,
+        industry: selectedIndustryFilter,
       },
     });
     return response.data;
