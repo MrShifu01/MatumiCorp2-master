@@ -323,6 +323,8 @@ const TransactionsPage = () => {
           closeModal={handleCloseModal}
           activeModalId={activeModalId}
           modalsData={modalsData}
+          selectedMandateFilter={selectedMandateFilter} // Pass selectedMandateFilter as prop
+          selectedIndustryFilter={selectedIndustryFilter} // Pass selectedIndustryFilter as prop
         />
       )}
     </>

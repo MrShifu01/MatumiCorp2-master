@@ -1,30 +1,62 @@
-import React from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { useSelector, useDispatch } from 'react-redux';
-import { openModal } from '../../redux/transactionsSlice';
+import React from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { openModal } from "../../redux/transactionsSlice";
 
-const Modal = ({ closeModal, activeModalId, modalsData }) => {
+const Modal = ({
+  closeModal,
+  activeModalId,
+  modalsData,
+  selectedMandateFilter,
+  selectedIndustryFilter,
+}) => {
   const activeModal = modalsData?.find((modal) => modal._id === activeModalId);
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((state) => state.transactions);
 
   const handleNextModal = () => {
-    const nextModalIndex = modalsData.findIndex((modal) => modal._id === activeModalId) + 1;
-    const nextModalId = modalsData[nextModalIndex % modalsData?.length]._id;
+    const nextModalIndex =
+      filteredModalsData.findIndex((modal) => modal._id === activeModalId) + 1;
+    const nextModalId =
+      filteredModalsData[nextModalIndex % filteredModalsData?.length]._id;
     dispatch(openModal(nextModalId));
   };
 
   const handlePrevModal = () => {
-    const prevModalIndex = modalsData.findIndex((modal) => modal._id === activeModalId) - 1;
+    const prevModalIndex =
+      filteredModalsData.findIndex((modal) => modal._id === activeModalId) - 1;
     const prevModalId =
-      modalsData[(prevModalIndex + modalsData?.length) % modalsData?.length]._id;
+      filteredModalsData[
+        (prevModalIndex + filteredModalsData?.length) %
+          filteredModalsData?.length
+      ]._id;
     dispatch(openModal(prevModalId));
   };
+
+  // Filter the modalsData based on the selectedMandateFilter and selectedIndustryFilter
+  const filteredModalsData = modalsData.filter((modal) => {
+    if (selectedMandateFilter && selectedIndustryFilter) {
+      return (
+        modal.mandate === selectedMandateFilter &&
+        modal.industry === selectedIndustryFilter
+      );
+    } else if (selectedMandateFilter) {
+      return modal.mandate === selectedMandateFilter;
+    } else if (selectedIndustryFilter) {
+      return modal.industry === selectedIndustryFilter;
+    }
+    return true;
+  });
 
   if (!activeModal) return null;
 
   return (
-    <Transition appear show={isModalOpen} onClose={closeModal} as={React.Fragment}>
+    <Transition
+      appear
+      show={isModalOpen}
+      onClose={closeModal}
+      as={React.Fragment}
+    >
       <Dialog as="div" className="border vh-100 vw-100">
         {/* Modal content */}
         <div className="fixed inset-0 flex items-center justify-center">
@@ -56,37 +88,61 @@ const Modal = ({ closeModal, activeModalId, modalsData }) => {
                   </button>
                 </div>
               </div>
-              <div className='row mt-8 pb-6'>
+              <div className="row mt-8 pb-6">
                 <div className=" modal-main col-md-4 offset-md-3">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    <div className='d-flex flex-column gap-5'>
-                      {<img style={{ width: "100px", height: "100px", objectFit: "contain" }} src={activeModal.imageSrc.includes('http') ? activeModal.imageSrc : `https://matumi-server.onrender.com${activeModal.imageSrc}`} alt="logo"/>}
-                      <p className='modal-description'>{activeModal.description}</p>
+                    <div className="d-flex flex-column gap-5">
+                      {
+                        <img
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "contain",
+                          }}
+                          src={
+                            activeModal.imageSrc.includes("http")
+                              ? activeModal.imageSrc
+                              : `https://matumi-server.onrender.com${activeModal.imageSrc}`
+                          }
+                          alt="logo"
+                        />
+                      }
+                      <p className="modal-description">
+                        {activeModal.description}
+                      </p>
                     </div>
                   </Dialog.Title>
                   {/* Add other modal content here */}
                 </div>
-                <div className='col-md-2 ps-7 border-start'>
-                  <h6 className='text-muted mt-5'>Mandate</h6>
+                <div className="col-md-2 ps-7 border-start">
+                  <h6 className="text-muted mt-5">Mandate</h6>
                   {activeModal.mandate}
-                  <br/>
-                  <h6 className='text-muted mt-5'>Geography</h6>
+                  <br />
+                  <h6 className="text-muted mt-5">Geography</h6>
                   {activeModal.geography}
-                  <br/>
-                  <h6 className='text-muted mt-5'>Industry</h6>
+                  <br />
+                  <h6 className="text-muted mt-5">Industry</h6>
                   {activeModal.industry}
-                  <br/>
+                  <br />
                 </div>
               </div>
               {/* Navigation Buttons */}
               <div className="modal-nav-btn-wrapper d-flex gap-7 justify-content-center">
-                <button type="button" className="modal-nav-button" onClick={handlePrevModal}>
+                <button
+                  type="button"
+                  className="modal-nav-button"
+                  onClick={handlePrevModal}
+                >
                   <img src="/left-arrow.png" width="30px" alt="left arrow" />
                 </button>
-                <button type="button" className="modal-nav-button" onClick={handleNextModal}>
+                <button
+                  type="button"
+                  className="modal-nav-button"
+                  onClick={handleNextModal}
+                >
                   <img src="/arrow-right.png" width="30px" alt="right arrow" />
                 </button>
               </div>
