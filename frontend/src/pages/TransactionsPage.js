@@ -179,103 +179,99 @@ const TransactionsPage = () => {
                       <img src="/search.png" alt="search" />
                     </Button>
                   </Form>
-                  {/* FILTER BY MANDATE */}
-                  <button
-                    className={`btn ${allMandates ? "btn-primary" : ""}`}
-                    onClick={handleAllMandates}
-                    disabled={allMandates}
-                  >
-                    All Mandates
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedMandateFilter === "Sell-Side" ? "btn-primary" : ""
-                    }`}
-                    onClick={(ev) => handleMandateFilter("Sell-Side")}
-                  >
-                    Sell-Side
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedMandateFilter === "Buy-Side" ? "btn-primary" : ""
-                    }`}
-                    onClick={(ev) => handleMandateFilter("Buy-Side")}
-                  >
-                    Buy-Side
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedMandateFilter === "Capital Raising"
-                        ? "btn-primary"
-                        : ""
-                    }`}
-                    onClick={(ev) => handleMandateFilter("Capital Raising")}
-                  >
-                    Capital Raising
-                  </button>
-
-                  {/* FILTER BY INDUSTRY*/}
-                  <button
-                    className={`btn ${allIndustries ? "btn-primary" : ""}`}
-                    onClick={handleAllIndustries}
-                    disabled={allIndustries}
-                  >
-                    All Industries
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedIndustryFilter === "Industrial"
-                        ? "btn-primary"
-                        : ""
-                    }`}
-                    onClick={(ev) => handleIndustryFilter("Industrial")}
-                  >
-                    Industrial
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedIndustryFilter === "Financial Services"
-                        ? "btn-primary"
-                        : ""
-                    }`}
-                    onClick={(ev) => handleIndustryFilter("Financial Services")}
-                  >
-                    Financial Services
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedIndustryFilter === "Logistics" ? "btn-primary" : ""
-                    }`}
-                    onClick={(ev) => handleIndustryFilter("Logistics")}
-                  >
-                    Logistics
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedIndustryFilter === "Technology"
-                        ? "btn-primary"
-                        : ""
-                    }`}
-                    onClick={(ev) => handleIndustryFilter("Technology")}
-                  >
-                    Technology
-                  </button>
-
-                  <button
-                    className={`btn ${
-                      selectedIndustryFilter === "Other" ? "btn-primary" : ""
-                    }`}
-                    onClick={(ev) => handleIndustryFilter("Other")}
-                  >
-                    Other
-                  </button>
+                  {/* FILTERS */}
+                  <div className="d-flex justify-content-between mt-5">
+                    <div>
+                      <button
+                        className={`btn ${allMandates ? "btn-primary" : ""}`}
+                        onClick={handleAllMandates}
+                        disabled={allMandates}
+                      >
+                        All Mandates
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedMandateFilter === "Sell-Side" ? "btn-primary" : ""
+                        }`}
+                        onClick={(ev) => handleMandateFilter("Sell-Side")}
+                      >
+                        Sell-Side
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedMandateFilter === "Buy-Side" ? "btn-primary" : ""
+                        }`}
+                        onClick={(ev) => handleMandateFilter("Buy-Side")}
+                      >
+                        Buy-Side
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedMandateFilter === "Capital Raising"
+                            ? "btn-primary"
+                            : ""
+                        }`}
+                        onClick={(ev) => handleMandateFilter("Capital Raising")}
+                      >
+                        Capital Raising
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        className={`btn ${allIndustries ? "btn-primary" : ""}`}
+                        onClick={handleAllIndustries}
+                        disabled={allIndustries}
+                      >
+                        All Industries
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedIndustryFilter === "Industrial"
+                            ? "btn-primary"
+                            : ""
+                        }`}
+                        onClick={(ev) => handleIndustryFilter("Industrial")}
+                      >
+                        Industrial
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedIndustryFilter === "Financial Services"
+                            ? "btn-primary"
+                            : ""
+                        }`}
+                        onClick={(ev) => handleIndustryFilter("Financial Services")}
+                      >
+                        Financial Services
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedIndustryFilter === "Logistics" ? "btn-primary" : ""
+                        }`}
+                        onClick={(ev) => handleIndustryFilter("Logistics")}
+                      >
+                        Logistics
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedIndustryFilter === "Technology"
+                            ? "btn-primary"
+                            : ""
+                        }`}
+                        onClick={(ev) => handleIndustryFilter("Technology")}
+                      >
+                        Technology
+                      </button>
+                      <button
+                        className={`btn ${
+                          selectedIndustryFilter === "Other" ? "btn-primary" : ""
+                        }`}
+                        onClick={(ev) => handleIndustryFilter("Other")}
+                      >
+                        Other
+                      </button>
+                    </div>
+                  </div>
 
                   <div className="row mt-8">
                     {isSuccess &&
