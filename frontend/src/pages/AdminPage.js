@@ -1,4 +1,4 @@
-import { Table, Button } from "react-bootstrap"
+import { Table, Button, Form } from "react-bootstrap"
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import Loader from "../components/Loader"
 import axios from "axios"
@@ -9,6 +9,8 @@ const AdminPage = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [transactions, setTransactions] = useState([])
+    const [search, setSearch] = useState('')
+    console.log(search)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -16,7 +18,7 @@ const AdminPage = () => {
             try {
                 setLoading(true)
                 const { data } = await axios.get('/api/transactions')
-                setTransactions(data)
+                setTransactions(data.transactions)
                 setLoading(false)
             } catch (error) {
                 setError(error.message)
@@ -72,6 +74,18 @@ const AdminPage = () => {
                 <Button className="my-6" onClick={handleAdd}>Add Transaction</Button>
             </div>
         </div>
+
+        <h2 className="ms-3">Search</h2>
+                  <Form className="d-flex">
+                    <Form.Control
+                      type="text"
+                      value={search}
+                      onChange={(ev) => setSearch(ev.target.value)}
+                      placeholder="Search Transactions..."
+                      className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
+                    ></Form.Control>
+                  </Form>
+
         {loading ? (
             <Loader />
         ) : error ? (
@@ -89,7 +103,14 @@ const AdminPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((transaction) => (
+                    {transactions?.filter((item) => {
+                        return search.toLowerCase() === '' || 
+                        item.title.toLowerCase().includes(search.toLowerCase()) || 
+                        item.mandate.toLowerCase().includes(search.toLowerCase()) || 
+                        item.geography.toLowerCase().includes(search.toLowerCase()) || 
+                        item.industry.toLowerCase().includes(search.toLowerCase()) || 
+                        item.description.toLowerCase().includes(search.toLowerCase());
+                    }).map((transaction) => (
                         <tr key={transaction._id}>
                             <td>{transaction.title}</td>
                             <td>{transaction.mandate}</td>

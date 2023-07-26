@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const url = process.env.MONGO_URI
+// const url = process.env.MONGO_URI
+const url = 'mongodb+srv://standerchristian:matumicorp@matumicluster.mvzjtom.mongodb.net/?retryWrites=true&w=majority'
 
 const connectDB = async () => {
     try {

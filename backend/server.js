@@ -22,7 +22,6 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/upload", uploadRoutes);
 
 
-console.log({__dirname})
 const rootDir = path.resolve(__dirname, '..');
 console.log(rootDir)
 app.use('/uploads', express.static(rootDir + '/uploads'))

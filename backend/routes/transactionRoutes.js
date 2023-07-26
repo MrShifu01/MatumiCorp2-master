@@ -11,7 +11,7 @@ router.route('/admin/:id')
 .get(getSingleTransaction)
 .put(updateTransaction)
 
-router.route('/test')
+router.route('/paginate')
 .get(getTransactions)
 
 module.exports = router

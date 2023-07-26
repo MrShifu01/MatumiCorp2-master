@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openModal } from '../../redux/transactionsSlice';
 
 const Modal = ({ closeModal, activeModalId, modalsData }) => {
-  console.log(modalsData)
   const activeModal = modalsData?.find((modal) => modal._id === activeModalId);
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((state) => state.transactions);

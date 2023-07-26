@@ -5,8 +5,7 @@ const Transaction = require("../models/TransactionModel");
 // @route   GET /transactions
 // @access  Public
 const getTransactions = asyncHandler(async (req, res) => {
-  const { keyword, filterOptionMandate, filterOptionGeography, filterOptionIndustry, page, limit } = req.query;
-  console.log(page);
+  const { keyword, filterOptionMandate, filterOptionIndustry, page, limit } = req.query;
 
   const startIndex = (parseInt(page) - 1) * limit;
   const endIndex = parseInt(page) * limit;
@@ -26,8 +25,6 @@ const getTransactions = asyncHandler(async (req, res) => {
     };
   } else if (filterOptionMandate) {
     query = { mandate: { $regex: filterOptionMandate, $options: "i" } };
-  } else if (filterOptionGeography) {
-    query = { geography: { $regex: filterOptionGeography, $options: "i" } };
   } else if (filterOptionIndustry) {
     query = { industry: { $regex: filterOptionIndustry, $options: "i" } };
   } else {
