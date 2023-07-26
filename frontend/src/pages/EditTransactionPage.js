@@ -17,7 +17,7 @@ const EditTransactionPage = () => {
 
     useEffect(() => {
         const fetchTransaction = async () => {
-            const response = await axios(`/api/transactions/${id}`)
+            const response = await axios(`/api/transactions/admin/${id}`)
             const transaction = response.data
             setTitle(transaction.title)
             setMandate(transaction.mandate)
@@ -32,7 +32,7 @@ const EditTransactionPage = () => {
     const submitHandler = async (e) => {
       e.preventDefault();
       try {
-        await axios.put(`/api/transactions/${id}`, {
+        await axios.put(`/api/transactions/admin/${id}`, {
           title,
           mandate,
           geography,

@@ -299,7 +299,7 @@ const TransactionsPage = () => {
                   </div>
                   <div className="d-flex justify-content-center mb-8">
                     <button
-                      className="btn btn-lg btn-light"
+                      className="border-0 bg-transparent load-button"
                       onClick={() => fetchNextPage()}
                       disabled={!hasNextPage || isFetchingNextPage}
                     >
@@ -308,7 +308,7 @@ const TransactionsPage = () => {
                       ) : hasNextPage ? (
                         <img src="/plus.png" width={"40px"} alt="load more" />
                       ) : (
-                        "No More Data"
+                        "No More Matching Data"
                       )}
                     </button>
                   </div>
