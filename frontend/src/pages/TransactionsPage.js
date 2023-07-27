@@ -148,10 +148,6 @@ const TransactionsPage = () => {
     return true;
   });
 
-  console.log("Industry: " + selectedIndustryFilter)
-  console.log("Mandate: " + selectedMandateFilter)
-  console.log(filteredData)
-
   if (!data) {
     // Handle initial data loading
     return <Loader />;
