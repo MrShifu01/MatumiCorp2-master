@@ -5,12 +5,17 @@ const About = () => {
     const h2Ref = useRef();
     const isIntersecting = useIntersectionObserver(h2Ref, { threshold: 0.5 });
     return (
-    <section className='about bg-light' id='about'>
+    <section className='about bg-#F4F4F4' id='about'>
         <div className='container'>
-            <div className='row  pt-6'>
-                <div className='col-md-6 offset-md-3'>
+            <div className="row mb-5 pt-6">
+                <div className="col-md-12">
                     <h2 ref={h2Ref} className={`about-title text-center text-dark invisible-h2 ${isIntersecting ? 'animate-slide-in' : ''}`}>About Us</h2>
-                    <hr className="w-25 mx-auto mb-5"/>
+                </div>
+            </div>
+            <div className='row pt-6'>
+                <div className='col-md-12'>
+
+                    {/* <hr className="w-25 mx-auto mb-5"/> */}
                     <h4>History</h4>
                     <hr className="w-25 mb-5"/>
                     <p>The company was founded in 2000 by Jane Ashburner and Patrick Glyn.</p>

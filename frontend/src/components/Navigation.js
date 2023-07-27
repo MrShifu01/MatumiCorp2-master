@@ -28,7 +28,7 @@ const ScrollListener = () => {
 
 function Navigation({bg}) {
   const [expanded, setExpanded] = useState(false);
-  const isScrolled = bg === 'bg-light' ? true : ScrollListener();
+  const isScrolled = bg === 'bg-white' ? true : ScrollListener();
 
   return (
     <div>
@@ -36,16 +36,13 @@ function Navigation({bg}) {
         expand="lg"
         expanded={expanded}
         className={`navbar ${
-          isScrolled ? "bg-light shadow-sm navbar-light" : "navbar-dark"
+          isScrolled ? "bg-white shadow-sm navbar-white" : "navbar-dark"
         } fixed-top`}
         variant="primary"
       >
-        <div className="navbar-content container-fluid">
-        <Navbar.Brand
-          className={`text-2xl ${isScrolled ? "text-primary" : "text-light"}`}
-          href="#hero"
-        >
-          {bg !== 'bg-light' ? (
+        <div className="navbar-content container ps-0 pe-5">
+        <Navbar.Brand>
+          {bg !== 'bg-white' ? (
             <Link
               to="hero"
               spy={true}
@@ -76,7 +73,7 @@ function Navigation({bg}) {
           >
             <Nav className="ms-auto pt-3">
 
-              {bg !== 'bg-light' &&
+              {bg !== 'bg-white' &&
                 <>
 
                 <Nav.Link>
@@ -85,7 +82,7 @@ function Navigation({bg}) {
 
                 <div
                   className={`text-uppercase nav-link-div ${
-                    isScrolled ? "text-dark" : "text-light"
+                    isScrolled ? "text-dark" : "text-white"
                   }`}
                 
                 >
@@ -103,7 +100,7 @@ function Navigation({bg}) {
                 </div>
                 <div
                   className={`text-dark text-uppercase nav-link-div ${
-                    isScrolled ? "text-dark" : "text-light"
+                    isScrolled ? "text-dark" : "text-white"
                   }`}
 
                 >
@@ -121,7 +118,7 @@ function Navigation({bg}) {
                 </div>
                 <div
                   className={`text-dark text-uppercase nav-link-div ${
-                    isScrolled ? "text-dark" : "text-light"
+                    isScrolled ? "text-dark" : "text-white"
                   }`}
                 >
                   <Link
@@ -138,7 +135,7 @@ function Navigation({bg}) {
                 </div>
                 <div
                   className={`text-dark text-uppercase nav-link-div ${
-                    isScrolled ? "text-dark" : "text-light"
+                    isScrolled ? "text-dark" : "text-white"
                   }`}
                 >
                   <Link
@@ -155,7 +152,7 @@ function Navigation({bg}) {
                 </div>
                 <div
                   className={`text-dark text-uppercase nav-link-div ${
-                    isScrolled ? "text-dark" : "text-light"
+                    isScrolled ? "text-dark" : "text-white"
                   }`}
                 >
                   <Link

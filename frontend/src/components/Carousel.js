@@ -3,7 +3,7 @@ import { Carousel, Image } from 'react-bootstrap';
 const TestimonialCarousel = () => {
 
   return (
-    <Carousel pause='hover' className='bg-info mb-4'>
+    <Carousel pause='hover' className='bg-#F4F4F4 mb-4'>
         <Carousel.Item>
         <p className="testimonial-text text-center">
               "Matumi M&A Corporate Advisers has been an exceptional partner in our journey of mergers and acquisitions.

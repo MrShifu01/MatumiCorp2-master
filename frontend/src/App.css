@@ -206,25 +206,12 @@ body {
 
 .animate-slide-in {
   visibility: visible;
-  animation: fade-in-left 1s ease-in-out both;
-}
-@keyframes fade-in-left {
-  0% {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-.fade-in-bottom {
-  animation: fade-in-bottom 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in-bottom 1s ease-in-out both;
 }
 @keyframes fade-in-bottom {
   0% {
-    transform: translateY(50px);
-    opacity: 0;
+    transform: translateY(10px);
+    opacity: 0.5;
   }
   100% {
     transform: translateY(0);
