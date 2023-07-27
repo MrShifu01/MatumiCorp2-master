@@ -57,7 +57,7 @@ const TransactionsPage = () => {
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
-      ["transactions", keyword, selectedMandateFilter, selectedIndustryFilter],
+      ["transactions", selectedMandateFilter, selectedIndustryFilter],
       ({ pageParam = 1 }) => fetchTransactions(pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
