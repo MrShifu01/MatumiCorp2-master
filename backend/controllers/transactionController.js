@@ -6,7 +6,8 @@ const Transaction = require("../models/TransactionModel");
 // @access  Public
 const getTransactions = asyncHandler(async (req, res) => {
   const { keyword, page, limit, mandate, industry } = req.query;
-
+  console.log(mandate)
+  console.log(industry)
   const startIndex = (parseInt(page) - 1) * limit;
   const endIndex = parseInt(page) * limit;
 
@@ -27,21 +28,20 @@ const getTransactions = asyncHandler(async (req, res) => {
     // if mandate, return transactions that match the mandate
     query = {
       $or: [
-        { mandate: { $regex: new RegExp(`^${mandate.trim()}$`, 'i') } },
+        { mandate: { $regex: mandate, $options: "i" } },
       ],
     };
   } else if (industry) {
     // if industry, return transactions that match the industry
     query = {
       $or: [
-        { industry: { $regex: new RegExp(`^${industry.trim()}$`, 'i') } },
+        { industry: { $regex: industry, $options: "i" } },
       ],
     };
   } else {
     // if no keyword or filterOption, return all transactions
     query = {};
   }
-  console.log(query)
   // Fetch total documents to calculate total pages
   const totalDocuments = await Transaction.countDocuments(query);
   const totalPages = Math.ceil(totalDocuments / limit);
@@ -55,8 +55,6 @@ const getTransactions = asyncHandler(async (req, res) => {
     totalPages,
   });
 });
-
-
 
 // @desc    Add a transaction
 // @route   POST /transactions

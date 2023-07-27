@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Navigation from "../components/Navigation";
@@ -11,6 +11,7 @@ import { Form, Button } from "react-bootstrap";
 import { useInfiniteQuery } from "react-query";
 
 const TransactionsPage = () => {
+
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((state) => state.transactions);
   const { activeModalId } = useSelector((state) => state.transactions);
@@ -28,14 +29,11 @@ const TransactionsPage = () => {
   // Move the useEffect inside the component and add keyword as a dependency
   useEffect(() => {
     const fetchModalsData = async () => {
-      console.log(selectedMandateFilter);
       const response = await axios.get(`/api/transactions/`, {
         params: {
           keyword,
           page: 1, // Assuming you want to fetch the first page of modal data
           limit: 1000,
-          mandate: selectedMandateFilter,
-          industry: selectedIndustryFilter,
         },
       });
       setModalsData(response.data.transactions);
@@ -43,9 +41,9 @@ const TransactionsPage = () => {
     fetchModalsData();
   }, [keyword, selectedMandateFilter, selectedIndustryFilter]);
 
-  const LIMIT = 12;
+  const LIMIT = selectedMandateFilter !== "" && selectedIndustryFilter !== "" ? 1000 : 14;
   const fetchTransactions = async (page) => {
-    const response = await axios.get(`/api/transactions/paginate/`, {
+    const response = await axios.get(`/api/transactions/paginate`, {
       params: {
         keyword,
         page,
@@ -59,7 +57,7 @@ const TransactionsPage = () => {
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
-      "transactions",
+      ["transactions", keyword, selectedMandateFilter, selectedIndustryFilter],
       ({ pageParam = 1 }) => fetchTransactions(pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
@@ -89,41 +87,40 @@ const TransactionsPage = () => {
     dispatch(closeCurrentModal());
   };
 
-  const handleMandateFilter = (mandate) => {
+  const handleMandateFilter = async (mandate) => {
     setAllMandates(false);
     setSelectedMandateFilter((prevFilter) =>
       prevFilter === mandate ? "" : mandate
     );
-    if (selectedMandateFilter) {
-      navigate(`/transactions?mandate=${mandate}`);
-    } else {
-      navigate(`/transactions`);
-    }
+    fetchNextPage();
+    navigate(`/transactions?mandate=${mandate}`);
   };
 
-  const handleIndustryFilter = (industry) => {
+  const handleIndustryFilter = async (industry) => {
     setAllIndustries(false);
     setSelectedIndustryFilter((prevFilter) =>
       prevFilter === industry ? "" : industry
     );
-    if (selectedIndustryFilter) {
-      navigate(`/transactions?industry=${industry}`);
-    } else {
-      navigate(`/transactions`);
-    }
+    fetchNextPage();
+    navigate(`/transactions?industry=${industry}`);
   };
 
   const handleAllMandates = () => {
     setAllMandates((prev) => !prev);
     setSelectedMandateFilter("");
+    fetchNextPage();
     navigate(`/transactions`);
   };
 
   const handleAllIndustries = () => {
     setAllIndustries((prev) => !prev);
     setSelectedIndustryFilter("");
+    // queryClient.invalidateQueries(['transactions', keyword, selectedMandateFilter, ''])
+    fetchNextPage();
     navigate(`/transactions`);
   };
+
+
 
   // Filter transactions based on the selectedFilter
   const filteredTransactions = data
@@ -150,6 +147,10 @@ const TransactionsPage = () => {
     // If neither filter is present, return all transactions
     return true;
   });
+
+  console.log("Industry: " + selectedIndustryFilter)
+  console.log("Mandate: " + selectedMandateFilter)
+  console.log(filteredData)
 
   if (!data) {
     // Handle initial data loading
@@ -191,17 +192,23 @@ const TransactionsPage = () => {
                       </button>
                       <button
                         className={`btn ${
-                          selectedMandateFilter === "Sell-Side" ? "btn-primary" : ""
+                          selectedMandateFilter === "Sell-Side"
+                            ? "btn-primary"
+                            : ""
                         }`}
                         onClick={(ev) => handleMandateFilter("Sell-Side")}
+                        disabled={selectedMandateFilter === "Sell-Side"}
                       >
                         Sell-Side
                       </button>
                       <button
                         className={`btn ${
-                          selectedMandateFilter === "Buy-Side" ? "btn-primary" : ""
+                          selectedMandateFilter === "Buy-Side"
+                            ? "btn-primary"
+                            : ""
                         }`}
                         onClick={(ev) => handleMandateFilter("Buy-Side")}
+                        disabled={selectedMandateFilter === "Buy-Side"}
                       >
                         Buy-Side
                       </button>
@@ -212,6 +219,7 @@ const TransactionsPage = () => {
                             : ""
                         }`}
                         onClick={(ev) => handleMandateFilter("Capital Raising")}
+                        disabled={selectedMandateFilter === "Capital Raising"}
                       >
                         Capital Raising
                       </button>
@@ -231,6 +239,7 @@ const TransactionsPage = () => {
                             : ""
                         }`}
                         onClick={(ev) => handleIndustryFilter("Industrial")}
+                        disabled={selectedIndustryFilter === "Industrial"}
                       >
                         Industrial
                       </button>
@@ -240,15 +249,23 @@ const TransactionsPage = () => {
                             ? "btn-primary"
                             : ""
                         }`}
-                        onClick={(ev) => handleIndustryFilter("Financial Services")}
+                        onClick={(ev) =>
+                          handleIndustryFilter("Financial Services")
+                        }
+                        disabled={
+                          selectedIndustryFilter === "Financial Services"
+                        }
                       >
                         Financial Services
                       </button>
                       <button
                         className={`btn ${
-                          selectedIndustryFilter === "Logistics" ? "btn-primary" : ""
+                          selectedIndustryFilter === "Logistics"
+                            ? "btn-primary"
+                            : ""
                         }`}
                         onClick={(ev) => handleIndustryFilter("Logistics")}
+                        disabled={selectedIndustryFilter === "Logistics"}
                       >
                         Logistics
                       </button>
@@ -259,14 +276,18 @@ const TransactionsPage = () => {
                             : ""
                         }`}
                         onClick={(ev) => handleIndustryFilter("Technology")}
+                        disabled={selectedIndustryFilter === "Technology"}
                       >
                         Technology
                       </button>
                       <button
                         className={`btn ${
-                          selectedIndustryFilter === "Other" ? "btn-primary" : ""
+                          selectedIndustryFilter === "Other"
+                            ? "btn-primary"
+                            : ""
                         }`}
                         onClick={(ev) => handleIndustryFilter("Other")}
+                        disabled={selectedIndustryFilter === "Other"}
                       >
                         Other
                       </button>

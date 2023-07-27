@@ -9,7 +9,7 @@ import store from './redux/store';
 import AdminPage from './pages/AdminPage';
 import EditTransactionPage from './pages/EditTransactionPage';
 import { QueryClient, QueryClientProvider } from "react-query";
-import TestPage from './pages/TestPage';
+import {  ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 
@@ -22,10 +22,6 @@ const router = createBrowserRouter([
   {
     path:'/transactions',
     element: <TransactionsPage />,
-  },
-  {
-    path:'/test',
-    element: <TestPage />,
   },
   {
     path: '/transactions/search/:keyword',
@@ -46,6 +42,7 @@ root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   </Provider>
 );
