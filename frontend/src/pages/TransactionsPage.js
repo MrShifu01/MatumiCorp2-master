@@ -55,7 +55,7 @@ const TransactionsPage = () => {
     return response.data;
   };
 
-  const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { data, isSuccess, isLoading, isFetching, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
       ["transactions", selectedMandateFilter, selectedIndustryFilter],
       ({ pageParam = 1 }) => fetchTransactions(pageParam),
@@ -115,7 +115,6 @@ const TransactionsPage = () => {
   const handleAllIndustries = () => {
     setAllIndustries((prev) => !prev);
     setSelectedIndustryFilter("");
-    // queryClient.invalidateQueries(['transactions', keyword, selectedMandateFilter, ''])
     fetchNextPage();
     navigate(`/transactions`);
   };
@@ -124,11 +123,11 @@ const TransactionsPage = () => {
 
   // Filter transactions based on the selectedFilter
   const filteredTransactions = data
-    ? data.pages.flatMap((page) => page.transactions)
+    ? data?.pages?.flatMap((page) => page.transactions)
     : [];
 
   // Filter transactions based on the selectedFilter and selectedMandateFilter
-  const filteredData = filteredTransactions.filter((transaction) => {
+  const filteredData = filteredTransactions?.filter((transaction) => {
     // Check if both the selectedMandateFilter and selectedIndustryFilter are present
     if (selectedMandateFilter && selectedIndustryFilter) {
       return (
@@ -147,11 +146,6 @@ const TransactionsPage = () => {
     // If neither filter is present, return all transactions
     return true;
   });
-
-  if (!data) {
-    // Handle initial data loading
-    return <Loader />;
-  }
 
   return (
     <>
@@ -176,7 +170,7 @@ const TransactionsPage = () => {
                       <img src="/search.png" alt="search" />
                     </Button>
                   </Form>
-                  {/* FILTERS */}
+{/* FILTERS */}
                   <div className="d-flex justify-content-between mt-5">
                     <div>
                       <button
@@ -290,9 +284,11 @@ const TransactionsPage = () => {
                     </div>
                   </div>
 
+{/* MAPPING */}
+                  {isFetching && <Loader />}
                   <div className="row mt-8">
                     {isSuccess &&
-                      filteredData.map((modal, index) => (
+                      filteredData?.map((modal, index) => (
                         <div
                           className="col-md-3 text-center modal-buttons"
                           key={index}
@@ -335,6 +331,7 @@ const TransactionsPage = () => {
           </section>
         </>
       )}
+{/* MODAL */}
       {isModalOpen && (
         <Modal
           closeModal={handleCloseModal}
