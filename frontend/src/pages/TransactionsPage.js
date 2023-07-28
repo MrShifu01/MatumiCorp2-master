@@ -67,7 +67,7 @@ const TransactionsPage = () => {
               : undefined;
           return nextPage;
         },
-      }
+      },
     );
 
   const handleSearch = () => {
@@ -119,7 +119,9 @@ const TransactionsPage = () => {
     navigate(`/transactions`);
   };
 
-
+  const hanldeGoBack = () => {
+    navigate('/');
+  };
 
   // Filter transactions based on the selectedFilter
   const filteredTransactions = data
@@ -151,142 +153,159 @@ const TransactionsPage = () => {
     <>
       {!isModalOpen && (
         <>
-          <Navigation bg={"bg-light"} />
-
-          <section className="transactions pt-6 bg-light h-100">
-            <div className="container">
-              <div className="row mt-8">
+          <section className="transactions bg-light h-100">
+            <div className="container-fluid position-relative transaction-hero">
+              <div className="container transaction-text-wrapper position-relative">
+                <div className="row pt-8">
+                  <div className="col text-center">
+                    <h1 className="ms-3 display-3">Transactions</h1>
+                  </div>
+                </div>
+                <div className="row ps-5 mt-4">
+                  <div className="col">
+                    <button className="btn btn-outline-secondary" onClick={hanldeGoBack}>
+                      Go Back
+                    </button>
+                  </div>
+                </div>
+                <div className="row ps-3 pb-8 mt-6">
                 <div className="col">
-                  <h2 className="ms-3">Search</h2>
-                  <Form onSubmit={handleSearch} className="d-flex">
-                    <Form.Control
-                      type="text"
-                      value={searchKeyword}
-                      onChange={(ev) => setSearchKeyword(ev.target.value)}
-                      placeholder="Search Transactions..."
-                      className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
-                    />
-                    <Button type="submit" variant="light" className="p-2 mx-2">
-                      <img src="/search.png" alt="search" />
-                    </Button>
-                  </Form>
-{/* FILTERS */}
-                  <div className="d-flex justify-content-between mt-5">
-                    <div>
-                      <button
-                        className={`btn ${allMandates ? "btn-primary" : ""}`}
-                        onClick={handleAllMandates}
-                        disabled={allMandates}
-                      >
-                        All Mandates
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedMandateFilter === "Sell-Side"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleMandateFilter("Sell-Side")}
-                        disabled={selectedMandateFilter === "Sell-Side"}
-                      >
-                        Sell-Side
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedMandateFilter === "Buy-Side"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleMandateFilter("Buy-Side")}
-                        disabled={selectedMandateFilter === "Buy-Side"}
-                      >
-                        Buy-Side
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedMandateFilter === "Capital Raising"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleMandateFilter("Capital Raising")}
-                        disabled={selectedMandateFilter === "Capital Raising"}
-                      >
-                        Capital Raising
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        className={`btn ${allIndustries ? "btn-primary" : ""}`}
-                        onClick={handleAllIndustries}
-                        disabled={allIndustries}
-                      >
-                        All Industries
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedIndustryFilter === "Industrial"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleIndustryFilter("Industrial")}
-                        disabled={selectedIndustryFilter === "Industrial"}
-                      >
-                        Industrial
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedIndustryFilter === "Financial Services"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) =>
-                          handleIndustryFilter("Financial Services")
-                        }
-                        disabled={
-                          selectedIndustryFilter === "Financial Services"
-                        }
-                      >
-                        Financial Services
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedIndustryFilter === "Logistics"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleIndustryFilter("Logistics")}
-                        disabled={selectedIndustryFilter === "Logistics"}
-                      >
-                        Logistics
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedIndustryFilter === "Technology"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleIndustryFilter("Technology")}
-                        disabled={selectedIndustryFilter === "Technology"}
-                      >
-                        Technology
-                      </button>
-                      <button
-                        className={`btn ${
-                          selectedIndustryFilter === "Other"
-                            ? "btn-primary"
-                            : ""
-                        }`}
-                        onClick={(ev) => handleIndustryFilter("Other")}
-                        disabled={selectedIndustryFilter === "Other"}
-                      >
-                        Other
-                      </button>
+                    <h2 className="ms-3">Search</h2>
+                    <Form onSubmit={handleSearch} className="d-flex">
+                      <Form.Control
+                        type="text"
+                        value={searchKeyword}
+                        onChange={(ev) => setSearchKeyword(ev.target.value)}
+                        placeholder="Search Transactions..."
+                        className="mr-sm-2 ml-sm-5 ps w-25 bg-transparent border-top-0 border-start-0 border-end-0 rounded-0 border-muted"
+                      />
+                      <Button type="submit" variant="transparent" className="py-2 px-4 mx-2">
+                        <img src="/search.png" alt="search" />
+                      </Button>
+                    </Form>
+  {/* FILTERS */}
+                    <div className="d-flex justify-content-between mt-6 ps-3 pe-5">
+                      <div>
+                        <button
+                          className={`btn ${allMandates ? "btn-primary" : ""}`}
+                          onClick={handleAllMandates}
+                          disabled={allMandates}
+                        >
+                          All Mandates
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedMandateFilter === "Sell-Side"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleMandateFilter("Sell-Side")}
+                          disabled={selectedMandateFilter === "Sell-Side"}
+                        >
+                          Sell-Side
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedMandateFilter === "Buy-Side"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleMandateFilter("Buy-Side")}
+                          disabled={selectedMandateFilter === "Buy-Side"}
+                        >
+                          Buy-Side
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedMandateFilter === "Capital Raising"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleMandateFilter("Capital Raising")}
+                          disabled={selectedMandateFilter === "Capital Raising"}
+                        >
+                          Capital Raising
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          className={`btn ${allIndustries ? "btn-primary" : ""}`}
+                          onClick={handleAllIndustries}
+                          disabled={allIndustries}
+                        >
+                          All Industries
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedIndustryFilter === "Industrial"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleIndustryFilter("Industrial")}
+                          disabled={selectedIndustryFilter === "Industrial"}
+                        >
+                          Industrial
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedIndustryFilter === "Financial Services"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) =>
+                            handleIndustryFilter("Financial Services")
+                          }
+                          disabled={
+                            selectedIndustryFilter === "Financial Services"
+                          }
+                        >
+                          Financial Services
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedIndustryFilter === "Logistics"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleIndustryFilter("Logistics")}
+                          disabled={selectedIndustryFilter === "Logistics"}
+                        >
+                          Logistics
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedIndustryFilter === "Technology"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleIndustryFilter("Technology")}
+                          disabled={selectedIndustryFilter === "Technology"}
+                        >
+                          Technology
+                        </button>
+                        <button
+                          className={`btn ${
+                            selectedIndustryFilter === "Other"
+                              ? "btn-primary"
+                              : ""
+                          }`}
+                          onClick={(ev) => handleIndustryFilter("Other")}
+                          disabled={selectedIndustryFilter === "Other"}
+                        >
+                          Other
+                        </button>
+                      </div>
                     </div>
                   </div>
-
+                </div>
+              </div>
+            </div>
+                  
 {/* MAPPING */}
+            <div className="container">       
+                <div className="row ps-3 mt-6">
                   {isFetching && <Loader />}
-                  <div className="row mt-8">
+                  <div className="row mt-5">
                     {isSuccess &&
                       filteredData?.map((modal, index) => (
                         <div
@@ -326,7 +345,6 @@ const TransactionsPage = () => {
                     </button>
                   </div>
                 </div>
-              </div>
             </div>
           </section>
         </>

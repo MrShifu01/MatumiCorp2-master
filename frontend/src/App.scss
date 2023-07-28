@@ -293,6 +293,18 @@ transform: translateX(20%);
   bottom: 20px; /* Adjust this value to change the vertical position */
 }
 
+.transaction-hero {
+    background-image: url("../public/transactionHero.jpeg");
+    background-size: cover;
+    background-attachment: fixed;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+transaction-text-wrapper {
+    position: absolute;
+    z-index: 1000;
+}
+
 /* Position the carousel indicators horizontally centered */
 .carousel-indicators {
   transform: translateY(250%);
