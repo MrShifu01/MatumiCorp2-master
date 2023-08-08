@@ -1,15 +1,19 @@
-* {
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
+    overflow-x: hidden;
     background-color: #eee;
 }
 
 .hero-container {
     position: relative;
     height: 100vh; /* You can adjust the height to your preference */
+    width: 100vw;
   }
   
 .hero-image {
@@ -54,39 +58,11 @@ margin-top: 7rem;
 padding-right: 10rem;
 transform: translateX(20%);
 }
-  
 
-// .hero-image {
-//     background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url("../public/heroImg2.jpeg");
-//     height: 50%;
-//     background-position: center;
-//     background-repeat: no-repeat;
-//     background-attachment: fixed;
-//     background-size: cover;
-//     position: relative;
-//     transform: scaleX(-1);
-// }
-
-// .hero-text {
-//     position: absolute;
-//     z-index: 1000;
-//     top: 20%;
-//     right: 50%;
-//     color: white;
-//     margin-left: 3rem;
-//     margin-top: 7rem;
-//     padding-right: 10rem;
-//     transform: translateX(20%);
-// }
 
 .navbar {
     transition: all 0.3s ease-in-out;
 }
-
-// .active-link {
-//     text-decoration: underline;
-//     color: var(--bs-dark);
-// }
 
 .active-link {
     position: relative;
