@@ -1,15 +1,19 @@
-* {
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background-color: #eee;
 }
 
 .hero-container {
   position: relative;
   height: 100vh; /* You can adjust the height to your preference */
+  width: 100vw;
 }
 
 .hero-image {
@@ -202,6 +206,35 @@ body {
 
 .invisible-h2 {
   visibility: hidden;
+}
+
+.contact-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #fff;
+  position: relative;
+}
+
+.contact-phone-icon {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-51%, -49%); /* This line ensures the icon is centered */
+}
+
+.contact-email-icon {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-51%, -49%); /* This line ensures the icon is centered */
+}
+
+.contact-map-icon {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-51%, -49%); /* This line ensures the icon is centered */
 }
 
 .animate-slide-in {
