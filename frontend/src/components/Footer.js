@@ -1,15 +1,16 @@
 import { Link } from "react-scroll";
+import { Link as LinkRouter } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <section className="bg-#F4F4F4 bg-gradient">
-      <div className="container-xxl">
-        <div className="row my-5">
-          <div className="col-md-6 text-sm-center">
-            <img src="black.png" className="px-3" style={{ width: "100px" }} alt="Matumi Logo" />
+    <section className="bg-#F4F4F4">
+      <div className="container ">
+        <div className="row my-5 ">
+          <div className="col-md-6 text-sm-center pe-8">
+            <img src="black.png" className="pe-4" style={{ width: "100px" }} alt="Matumi Logo" />
             Copyright &copy; 2023 Matumi Corporate Advisers
           </div>
-          <div className="col-md-6 text-end">
+          <div className="col-md-6 text-end mt-1">
             <div className="footer-wrapper d-flex justify-content-center pt-3 col-md-8 offset-md-2">
               <Link
                 className="footer-link"
@@ -31,16 +32,12 @@ const Footer = () => {
               >
                 Services
               </Link>
-              <Link
+              <LinkRouter
                 className="footer-link"
-                to="transactions"
-                spy={true}
-                smooth={true}
-                offset={-90}
-                duration={500}
+                to="/transactions"
               >
                 Transactions
-              </Link>
+              </LinkRouter>
               <Link
                 className="footer-link"
                 to="team"

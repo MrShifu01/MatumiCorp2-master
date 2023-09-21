@@ -6,8 +6,8 @@ const Transaction = require("../models/TransactionModel");
 // @access  Public
 const getTransactions = asyncHandler(async (req, res) => {
   const { keyword, page, limit, mandate, industry } = req.query;
-  console.log(mandate)
-  console.log(industry)
+  // console.log(mandate)
+  // console.log(industry)
   const startIndex = (parseInt(page) - 1) * limit;
   const endIndex = parseInt(page) * limit;
 

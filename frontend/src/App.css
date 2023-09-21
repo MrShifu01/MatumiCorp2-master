@@ -128,7 +128,7 @@ body {
 .nav-link-div {
   font-size: 0.9rem;
   margin-top: 0.5rem;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   cursor: pointer;
 }
 
@@ -183,7 +183,28 @@ body {
 }
 
 .footer-link {
-  text-decoration: underline;
+  position: relative;
+  text-decoration: none;
+  color: var(--bs-dark);
+}
+
+.footer-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #000;
+  transition: width 0.3s ease; /* This provides the animation effect */
+}
+
+.footer-link:hover::before {
+  width: 100%;
+}
+
+.footer-link:hover {
+  cursor: pointer;
   color: var(--bs-dark);
 }
 

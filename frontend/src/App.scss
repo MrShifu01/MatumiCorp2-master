@@ -59,7 +59,6 @@ padding-right: 10rem;
 transform: translateX(20%);
 }
 
-
 .navbar {
     transition: all 0.3s ease-in-out;
 }
@@ -131,7 +130,7 @@ transform: translateX(20%);
 .nav-link-div {
     font-size: 0.9rem;
     margin-top: 0.5rem;
-    margin-left: 0.5rem;
+    margin-left: 1rem;
     cursor: pointer;
 }
 
@@ -185,9 +184,41 @@ transform: translateX(20%);
 }
 
 .footer-link {
-    text-decoration: underline;
+    position: relative;
+    text-decoration: none;
     color: var(--bs-dark);
 }
+
+.footer-link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #000;
+    transition: width 0.3s ease; /* This provides the animation effect */
+}
+
+.footer-link:hover::before {
+    width: 100%;
+}
+
+.footer-link:hover {
+    cursor: pointer;
+    color: var(--bs-dark);
+}
+
+// .footer-link {
+//     text-decoration: none;
+//     color: var(--bs-dark);
+// }
+
+// .footer-link:hover {
+//     border-bottom: 1px solid #000;
+//     cursor: pointer;
+//     color: var(--bs-dark);
+// }
 
 .card-img-top {
     width: 320px;

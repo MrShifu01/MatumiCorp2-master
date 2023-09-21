@@ -9,10 +9,10 @@ const Hero = () => {
       <div className='hero-overlay'></div>
 
       {/* Container for the hero text */}
-      <div className='hero-text'>
+      <div className='hero-text pt-8'>
         <h6 className='text-uppercase text-sm'>Welcome to</h6>
         <h1 className='heading'>Matumi Corporate Advisers</h1>
-        <p className='lead'>
+        <p className='lead mt-5'>
           Matumi is a boutique M&A advisory firm specializing in end-to-end merger and acquisition services across various sectors, including healthcare, logistics, and technology.
         </p>
         <div>
